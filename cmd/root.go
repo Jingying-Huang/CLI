@@ -19,8 +19,17 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 )
+
+var colors = []*color.Color{
+	color.New(color.FgRed),
+	color.New(color.FgGreen),
+	color.New(color.FgYellow),
+	color.New(color.FgCyan),
+	color.New(color.FgMagenta),
+}
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{

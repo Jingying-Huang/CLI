@@ -16,47 +16,35 @@ limitations under the License.
 package cmd
 
 import (
+	"fmt"
+	"math/rand"
 	"time"
 
 	"github.com/spf13/cobra"
 )
 
-type color string
-
-const (
-	colorBlack  color = "\u001b[30m"
-	colorRed          = "\u001b[31m"
-	colorGreen        = "\u001b[32m"
-	colorYellow       = "\u001b[33m"
-	colorBlue         = "\u001b[34m"
-	colorReset        = "\u001b[0m"
-)
+var isColor bool
 
 // CurtimeCmd represents the curtime command
 var curtimeCmd = &cobra.Command{
-	Use: "curtime",
+	Use:   "curtime",
+	Short: "Show current time",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		now := time.Now()
 		prettyTime := now.Format(time.RubyDate)
-		cmd.Println("Hey Gophers! The current time is", prettyTime)
+		cmd.Print("Hey Gophers! The current time is ")
+		rand.Seed(time.Now().Unix())
+		outputColor := colors[rand.Intn(len(colors))]
+		if isColor == true {
+			outputColor.Println(prettyTime)
+		} else {
+			fmt.Println(prettyTime)
+		}
 		return nil
 	},
 }
 
-// func colorize(color color, str string) {
-// 	fmt.Println(string(color), str, string(colorReset))
-// }
+func init() {
+	curtimeCmd.Flags().BoolVarP(&isColor, "color", "c", false, "display colorized output")
 
-// func init() {
-// 	cobra.OnInitialize(initConfig)
-// 	curtimeCmd.PersistentFlags().Bool("color", false, "display colorized output")
-
-// }
-
-// func initConfig() {
-// 	clr, _ := curtimeCmd.Flags().GetString("curtime")
-// 	// if clr != "" {
-// 	// 	colorize(colorGreen, "hello world")
-// 	// 	return
-// 	// }
-// }
+}
